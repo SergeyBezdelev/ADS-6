@@ -32,8 +32,9 @@ class TPQueue {
                 T tmp = arr[i - 1];
                 arr[i - 1] = arr[i];
                 arr[i] = tmp;
-            }else
+            } else {
                 break;
+            }
             i--;
             if (i < 0) i = MaxSize;
         }
@@ -47,7 +48,7 @@ class TPQueue {
         int res = begin++;
         if (begin > MaxSize) begin -= MaxSize + 1;
         return arr[res];
-    }   
+    }
     T top() const {
         return arr[begin];
     }
@@ -65,5 +66,5 @@ struct SYM {
     bool operator>(const SYM& other) const {
         return prior > other.prior;
     }
-
+};
 #endif  // INCLUDE_TPQUEUE_H_
