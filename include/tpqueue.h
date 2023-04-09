@@ -18,7 +18,7 @@ class TPQueue {
     void push(const T& item) {
         if (count == size) throw "Queue is full";
         int i = end - 1;
-        while (i >= begin && item.prior > arr[i].prior) {
+        while (i >= begin && item.prior < arr[i].prior) {
             arr[i + 1] = arr[i];
             i--;
         }
