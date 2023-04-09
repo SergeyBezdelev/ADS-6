@@ -6,47 +6,64 @@ template<typename T, int size>
 class TPQueue {
  private:
     T* arr;
-    int count;
+    int MaxSize;
     int begin;
     int end;
+    int count;
 
  public:
-    TPQueue() : arr(new T[size]), count(0), begin(0), end(0) {}
+    TPQueue() : MaxSize(size), begin(0), end(0), count(0) {
+        arr = new T[MaxSize + 1];
+    }
     ~TPQueue() {
         delete[] arr;
     }
     void push(const T& item) {
-        if (count == size) throw "Queue is full";
-        int i = end - 1;
-        while (i >= begin && item > arr[i]) {
-            arr[i + 1] = arr[i];
-            i--;
+        if (count >= MaxSize) {
+            throw "Queue is full!";
+            return;
         }
-        arr[i + 1] = item;
-        end++;
+        arr[end++] = item;
         count++;
-        if (end == size) end = 0;
+        if (end > MaxSize) end -= MaxSize + 1;
+        int i = end - 1;
+        while (i != begin) {
+            if (arr[i].prior > arr[i - 1].prior) {
+                T tmp = arr[i - 1];
+                arr[i - 1] = arr[i];
+                arr[i] = tmp;
+            }else
+                break;
+            i--;
+            if (i < 0) i = MaxSize;
+        }
     }
     T pop() {
-        if (count == 0) throw "Queue is empty";
-        T item = arr[begin];
-        begin++;
+        if (count <= 0) {
+            throw "Queue is empty!";
+            return T();
+        }
         count--;
-        if (begin == size) begin = 0;
-        return item;
+        int res = begin++;
+        if (begin > MaxSize) begin -= MaxSize + 1;
+        return arr[res];
+    }   
+    T top() const {
+        return arr[begin];
     }
-    bool isEmpty() const {
+    bool is_empty() const {
         return count == 0;
     }
-    bool isFull() const {
-        return count == size;
+    bool is_full() const {
+        return count == MaxSize;
     }
 };
 
 struct SYM {
   char ch;
   int prior;
-    bool operator>(const SYM& other) const { return prior > other.prior; }
-};
+    bool operator>(const SYM& other) const {
+        return prior > other.prior;
+    }
 
 #endif  // INCLUDE_TPQUEUE_H_
