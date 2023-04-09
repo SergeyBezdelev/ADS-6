@@ -18,7 +18,7 @@ class TPQueue {
     void push(const T& item) {
         if (count == size) throw "Queue is full";
         int i = end - 1;
-        while (i >= begin && item.prior > arr[i].prior) {
+        while (i >= begin && item > arr[i]) {
             arr[i + 1] = arr[i];
             i--;
         }
@@ -46,7 +46,7 @@ class TPQueue {
 struct SYM {
   char ch;
   int prior;
-    bool operator<(const SYM& other) const { return prior > other.prior; }
+    bool operator>(const SYM& other) const { return prior > other.prior; }
 };
 
 #endif  // INCLUDE_TPQUEUE_H_
