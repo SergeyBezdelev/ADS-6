@@ -63,8 +63,5 @@ class TPQueue {
 struct SYM {
   char ch;
   int prior;
-    bool operator>(const SYM& other) const {
-        return prior > other.prior;
-    }
 };
 #endif  // INCLUDE_TPQUEUE_H_
