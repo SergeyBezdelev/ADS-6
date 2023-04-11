@@ -35,7 +35,7 @@ TPQueue<T, size>::~TPQueue() {
 
 template<typename T, int size>
 void TPQueue<T, size>::push(const T& item) {
-    if (count == size) throw std::string"Queue is full";
+    if (count == size) throw std::string("Queue is full");
     count++;
     int index = end, j = begin, i = end;
     while (j < end) {
@@ -55,7 +55,7 @@ void TPQueue<T, size>::push(const T& item) {
 
 template<typename T, int size>
 T& TPQueue<T, size>::pop() {
-    if (isEmpty()) throw std::string"Queue is empty";
+    if (isEmpty()) throw std::string("Queue is empty");
     count--;
     return arr[begin++ % size];
 }
