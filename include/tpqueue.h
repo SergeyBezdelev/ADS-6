@@ -39,15 +39,15 @@ void TPQueue<T, size>::push(const T& item) {
     count++;
     int index = end, j = begin, i = end;
     while (j < end) {
-        j++;
         if (arr[j].prior < item.prior) {
             index = j;
             break;
         }
+        j++;
     }
     while (i > index) {
-        i--;
         arr[i % size] = arr[(i - 1) % size];
+        i--;
     }
     arr[index % size] = item;
     end++;
