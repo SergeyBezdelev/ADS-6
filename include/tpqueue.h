@@ -3,67 +3,70 @@
 #define INCLUDE_TPQUEUE_H_
 
 #include <string>
+struct SYM {
+    char ch;
+    int prior;
+};
 
 template<typename T, int size>
 class TPQueue {
  private:
     T* arr;
-    int MaxSize;
     int begin;
     int end;
     int count;
 
  public:
-    TPQueue() : MaxSize(size), begin(0), end(0), count(0) {
-        arr = new T[MaxSize + 1];
-    }
-    ~TPQueue() {
-        delete[] arr;
-    }
-    void push(const T& item) {
-        if (count >= MaxSize) {
-            throw "Queue is full!";
-            return;
-        }
-        arr[end++] = item;
-        count++;
-        if (end > MaxSize) end -= MaxSize + 1;
-        int i = end - 1;
-        while (i != begin) {
-            if (arr[i].prior > arr[i - 1].prior) {
-                T tmp = arr[i - 1];
-                arr[i - 1] = arr[i];
-                arr[i] = tmp;
-            } else {
-                break;
-            }
-            i--;
-            if (i < 0) i = MaxSize;
-        }
-    }
-    T pop() {
-        if (count <= 0) {
-            throw "Queue is empty!";
-            return T();
-        }
-        count--;
-        int res = begin++;
-        if (begin > MaxSize) begin -= MaxSize + 1;
-        return arr[res];
-    }
-    T top() const {
-        return arr[begin];
-    }
-    bool is_empty() const {
-        return count == 0;
-    }
-    bool is_full() const {
-        return count == MaxSize;
-    }
+    TPQueue();
+    ~TPQueue();
+    void push(const T& item);
+    T& pop();
+    bool isEmpty() const;
+    bool isFull() const;
 };
 
-struct SYM {
-  char ch;
-  int prior;
-};
+template<typename T, int size>
+TPQueue<T,size>::TPQueue() : arr(new T[size]), count(0), begin(0), end(0) {}
+
+template<typename T, int size>
+TPQueue<T, size>::~TPQueue() {
+    delete[] arr;
+}
+
+template<typename T, int size>
+void TPQueue<T, size>::push(const T& item) {
+    if (count == size) throw "Queue is full";
+    count++;
+    int index = end, j = begin, i = end;
+    while (j < end) {
+        j++;
+        if (arr[j].prior < item.prior) {
+            index = j;
+            break;
+        }
+    }
+    while (i > index) {
+        i--;
+        arr[i % size] = arr[(i - 1) % size];
+    }
+    arr[index % size] = item;
+    end++;
+}
+
+template<typename T, int size>
+T& TPQueue<T, size>::pop() {
+    if (isEmpty()) throw "Queue is empty";
+    count--;
+    return arr[begin++ % size];
+}
+
+template<typename T, int size>
+bool TPQueue<T, size>::isEmpty() const {
+    return count == 0;
+}
+
+template<typename T, int size>
+bool TPQueue<T, size>:: isFull() const {
+    return count == size;
+}
 #endif  // INCLUDE_TPQUEUE_H_
